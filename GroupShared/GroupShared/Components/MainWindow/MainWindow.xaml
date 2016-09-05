@@ -1,0 +1,134 @@
+﻿<Window x:Class="GroupShared.Components.MainWindow.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mainWindow="clr-namespace:GroupShared.Components.MainWindow"
+        xmlns:controls="clr-namespace:GroupShared.Controls"
+        xmlns:userList="clr-namespace:GroupShared.Components.UserList"
+        mc:Ignorable="d" Icon="../../Assets/icon.ico"
+        Title="Group Shared" MinHeight="400" MinWidth="600" WindowState="Maximized" FontFamily="Comic Sans MS">
+    <Window.Resources>
+        <mainWindow:MainWindowViewModel x:Key="MainViewModel"/>
+    </Window.Resources>
+
+    <Grid DataContext="{Binding PaymentViewModel, Source={StaticResource MainViewModel}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.ColumnSpan="2" Background="#007ACC">
+            <TextBlock Text="PAYMENTS HISTORY" Style="{StaticResource PageTitle}"/>
+            <Button Visibility="Hidden" Width="30" Height="30" Padding="0" HorizontalAlignment="Right" Margin="5,2" Background="Transparent" BorderThickness="0"
+                    Command="{Binding OpenUserListCommand}">
+                <Image Source="../../Assets/profile.png"  HorizontalAlignment="Right" Width="30"/>
+            </Button>
+        </Grid>
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="PAYMENT DETAIL" Margin="15,0,0,0" Style="{StaticResource PageTitle}"/>
+
+        <ListView Margin="5" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Models}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="0,0,0,1" BorderBrush="#bbb">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding DateText}" Foreground="Green" Margin="5,0"/>
+                            <TextBlock Grid.Column="1" Text="{Binding SpentText}" Foreground="DarkRed" TextAlignment="Right" Margin="5,0"/>
+                            <TextBlock Grid.Column="2" Text="{Binding Reason}" Margin="5,0"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <Button Width="120" Margin="4" Command="{Binding BaselineCommand}" Style="{StaticResource FunctionButton}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="../../Assets/baseline.png" Margin="2"/>
+                        <TextBlock Text="Baseline" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button Width="120" Margin="4" Command="{Binding ExportCommand}" Style="{StaticResource FunctionButton}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="../../Assets/export1.png" Margin="2"/>
+                        <TextBlock Text="Export" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button Width="140" Margin="4" Command="{Binding ExportBaselineCommand}" Style="{StaticResource FunctionButton}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="../../Assets/export2.png" Margin="2"/>
+                        <TextBlock Text="Export Baselined" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Column="0" Grid.Row="0" DataContext="{Binding SelectedItem}" Visibility="{Binding PaymentViewModel.AddNewVisibility, Source={StaticResource MainViewModel}, Converter={StaticResource VisibilityInvertedConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <controls:InputPayment/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="New" Style="{StaticResource FunctionButton}" 
+                            Command="{Binding PaymentViewModel.NewPaymentCommand, Source={StaticResource MainViewModel}}"/>
+                        <Button Content="Update" Style="{StaticResource FunctionButton}"
+                            Command="{Binding PaymentViewModel.UpdatePaymentCommand, Source={StaticResource MainViewModel}}"/>
+                        <Button Content="Delete" Style="{StaticResource FunctionButton}"
+                            Command="{Binding PaymentViewModel.DeletePaymentCommand, Source={StaticResource MainViewModel}}"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="0" Grid.Row="0" DataContext="{Binding NewItem}" Visibility="{Binding PaymentViewModel.AddNewVisibility, Source={StaticResource MainViewModel}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <controls:InputPayment/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Add" Style="{StaticResource FunctionButton}"
+                            Command="{Binding PaymentViewModel.AddPaymentCommand, Source={StaticResource MainViewModel}}"/>
+                        <Button Content="Cancel" Style="{StaticResource FunctionButton}"
+                            Command="{Binding PaymentViewModel.CancelPaymentCommand, Source={StaticResource MainViewModel}}"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+
+            <Grid Grid.Row="1">
+                <userList:UserListControl DataContext="{Binding UserListViewModel,Source={StaticResource MainViewModel}}"/>
+            </Grid>
+        </Grid>
+
+        
+    </Grid>
+</Window>

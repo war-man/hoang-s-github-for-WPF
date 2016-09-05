@@ -1,0 +1,88 @@
+﻿<Window x:Class="GroupShared.Components.UserList.UserListView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GroupShared.Components.UserList"
+        xmlns:controls="clr-namespace:GroupShared.Controls"
+        mc:Ignorable="d" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        Title="Group Shared - User List" Height="400" Width="600" MinHeight="300" MinWidth="400" FontFamily="Comic Sans MS">
+    <Window.Resources>
+        <local:UserListViewModel x:Key="ViewModel"/>
+    </Window.Resources>
+    <Grid DataContext="{StaticResource ViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2" Background="#007ACC">
+            <TextBlock Text="USERS LIST" Style="{StaticResource PageTitle}"/>
+        </Grid>
+
+        <ListView Margin="5" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Models}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="0,0,0,1" BorderBrush="#bbb">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Name}" Margin="5,0"/>
+                            <TextBlock Grid.Column="1" Text="{Binding TotalSpentText}" Foreground="DarkRed" TextAlignment="Right" Margin="5,0"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <Button Content="Close" Width="120" Margin="4" IsCancel="True"/>
+        </StackPanel>
+
+        <Grid Grid.Column="1" Grid.Row="1" Margin="10,5" DataContext="{Binding SelectedItem}" Visibility="{Binding AddNewVisibility, Source={StaticResource ViewModel}, Converter={StaticResource VisibilityInvertedConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <controls:InputUser/>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="New" Style="{StaticResource FunctionButton}" 
+                            Command="{Binding NewPaymentCommand, Source={StaticResource ViewModel}}"/>
+                    <Button Content="Update" Style="{StaticResource FunctionButton}"
+                            Command="{Binding UpdatePaymentCommand, Source={StaticResource ViewModel}}"/>
+                    <Button Content="Delete" Style="{StaticResource FunctionButton}"
+                            Command="{Binding DeletePaymentCommand, Source={StaticResource ViewModel}}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="1" Margin="10,5" DataContext="{Binding NewItem}" Visibility="{Binding AddNewVisibility, Source={StaticResource ViewModel}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <controls:InputUser/>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Add" Style="{StaticResource FunctionButton}"
+                            Command="{Binding AddPaymentCommand, Source={StaticResource ViewModel}}"/>
+                    <Button Content="Cancel" Style="{StaticResource FunctionButton}"
+                            Command="{Binding CancelPaymentCommand, Source={StaticResource ViewModel}}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
