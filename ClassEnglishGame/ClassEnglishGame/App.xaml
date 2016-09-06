@@ -1,0 +1,11 @@
+﻿<Application x:Class="ClassEnglishGame.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:Converter="clr-namespace:ClassEnglishGame"
+             xmlns:Converters="clr-namespace:ClassEnglishGame.Converters" StartupUri="MainWindow.xaml">
+  <Application.Resources>
+    <Converters:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
+    <Converters:InvertVisibilityConverter x:Key="InvertVisibilityConverter"/>
+    <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+  </Application.Resources>
+</Application>

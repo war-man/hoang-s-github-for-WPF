@@ -1,0 +1,60 @@
+﻿<Controls:MetroWindow x:Class="ClassEnglishGame.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+        Title="English Game" MinHeight="600" MinWidth="800" 
+        Icon="/ClassEnglishGame;component/Images/eg icon.ico" ScrollViewer.CanContentScroll="False"
+                      KeyUp="MainKeyUp">
+
+  <Controls:MetroWindow.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Controls:MetroWindow.Resources>
+
+  <Controls:MetroWindow.WindowCommands>
+    <Controls:WindowCommands>
+      <Button Click="NavigateToPageClick" Tag="Welcome">
+        <Button.Content>
+          <Image Source="/ClassEnglishGame;component/Images/home.png" Width="16" Height="16"/>
+        </Button.Content>
+      </Button>
+      <Button Content="Talk in Minute" Click="NavigateToPageClick" Tag="Talk in Minute"/>
+      <Button Content="Taboo" Click="NavigateToPageClick" Tag="Taboo"/>
+      <Button Content="Charades" Click="NavigateToPageClick" Tag="Charades"/>
+      <Button Content="Picture Dash" Click="NavigateToPageClick" Tag="Picture Dash"/>
+      <Button Content="Who am I" Click="NavigateToPageClick" Tag="Who am I"/>
+      <Button Name="SettingFunction" Click="NavigateToPageClick" Tag="Setting" Visibility="Collapsed">
+        <Button.Content>
+          <Image Source="/ClassEnglishGame;component/Images/setting.png" Width="16" Height="16"/>
+        </Button.Content>
+      </Button>
+    </Controls:WindowCommands>
+  </Controls:MetroWindow.WindowCommands>
+
+  <i:Interaction.Behaviors>
+    <Behaviours:BorderlessWindowBehavior ResizeWithGrip="True" AutoSizeToContent="False"/>
+  </i:Interaction.Behaviors>
+
+  <Grid>
+    <Grid.Background>
+      <RadialGradientBrush RadiusY="0.844" RadiusX="0.879" Center="0.269,0.107" GradientOrigin="0.269,0.107">
+        <GradientStop Color="{DynamicResource AccentColor}"/>
+        <GradientStop Color="{DynamicResource AccentColor3}" Offset="0.987"/>
+      </RadialGradientBrush>
+    </Grid.Background>
+
+    <Grid Name="MainControl" Margin="10 10 10 20"/>
+    
+    <TextBlock Text="English game for class - Created by: Ryan Tong - Contact: zquanghoangz@gmail.com" 
+               VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10 0 10 5" Foreground="White" Opacity="0.4"/>
+  </Grid>
+</Controls:MetroWindow>

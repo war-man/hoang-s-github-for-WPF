@@ -1,0 +1,2 @@
+"C:\Program Files (x86)\Microsoft Visual Studio 10.0\PreEmptive Solutions\Dotfuscator Community Edition\dotfuscator.exe" /in:$(TargetFileName)
+copy /y "$(TargetDir)Dotfuscated\$(TargetFileName)" "$(TargetDir)\$(TargetFileName)"

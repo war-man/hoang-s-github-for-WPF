@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="ClassEnglishGame.GameControl.PictureDash"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <Grid>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" BorderThickness="0" Visibility="{Binding PictureDashHomeVisibility}">
+      <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <WrapPanel x:Name="LayoutRoot" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+      </StackPanel>
+    </ScrollViewer>
+
+    <Grid Visibility="{Binding PictureDashHomeVisibility, Converter={StaticResource InvertVisibilityConverter}}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="6*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <Viewbox>
+        <TextBlock  Text="{Binding SelectedGameItem.Title}" HorizontalAlignment="Center" Margin="2" Foreground="White" Visibility="{Binding ShowTitleVisibility}"/>
+      </Viewbox>
+
+      <Canvas Grid.Row="2">
+        <Image Name="MovingImage"  Source="{Binding SelectedGameItem.Image, Converter={StaticResource ByteArrayToImageConverter}}"
+                 Stretch="Uniform" Margin="0"/>
+      </Canvas>
+
+      <StackPanel Grid.Row="3" Orientation="Horizontal">
+        <Button Content="Previous" Width="80" Height="22" Margin="0 5 10 5" Click="PreviousClick"/>
+        <TextBlock Name="CurrentSelect" Text="0/0" Margin="0 10 10 0"/>
+        <Button Content="Next" Width="80" Height="22" Margin="0 5 0 5" Click="NextClick"/>
+        <Button Content="Show" Width="80" Height="22" Margin="10 5 0 5" Click="ShowClick"/>
+        <Button Content="Copy All Words" Width="100" Height="22" Margin="10 5 0 5" Click="CopyAllWordClick"/>
+      </StackPanel>
+      <Button Grid.Row="3" Content="Back" HorizontalAlignment="Right" Width="80" Height="22" Margin="0 5 0 5" Click="BackTopicClick"/>
+    </Grid>
+  </Grid>
+</UserControl>

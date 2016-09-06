@@ -1,0 +1,324 @@
+﻿<UserControl x:Class="ClassEnglishGame.Setting"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="800">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Grid Name="LayoutRoot">
+    <TabControl>
+      <TabItem Header="Game Item">
+        <TabItem.Content>
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="List game data item" Foreground="White" FontSize="16" FontWeight="Bold" Margin="10"/>
+            <TextBlock Name="EditorTitle" Grid.Column="1" Text="Selected item detail" Foreground="White" FontSize="16" FontWeight="Bold" Margin="10"/>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+              <CheckBox Name="GroupByGameNameCheckBox"  Content="Group by Game Name" IsChecked="True" Checked="GroupByGameNameCheckedChange" Unchecked="GroupByGameNameCheckedChange"/>
+              <CheckBox Name="GroupByTopicCheckBox" Content="Group by Topic" HorizontalAlignment="Right" Checked="GroupByTopicCheckedChange" Unchecked="GroupByTopicCheckedChange" Margin="40 0 0 0"/>
+            </StackPanel>
+            <DataGrid Name="DataGridGameItem" Grid.Row="1" SelectionChanged="ListItemSelectionChange" SelectionMode="Single"
+          ItemsSource="{Binding GameItemsView}" SelectedItem="{Binding SelectedGameItem, Mode=TwoWay}"
+          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Margin="0 24 0 0"
+          AlternatingRowBackground="LightCyan"  AlternationCount="2">
+              <DataGrid.GroupStyle>
+                <GroupStyle>
+                  <GroupStyle.HeaderTemplate>
+                    <DataTemplate>
+                      <StackPanel>
+                        <TextBlock Text="{Binding Name}" />
+                      </StackPanel>
+                    </DataTemplate>
+                  </GroupStyle.HeaderTemplate>
+                  <GroupStyle.ContainerStyle>
+                    <Style TargetType="{x:Type GroupItem}">
+                      <Setter Property="Template">
+                        <Setter.Value>
+                          <ControlTemplate TargetType="{x:Type GroupItem}">
+                            <Expander>
+                              <Expander.Header>
+                                <StackPanel Orientation="Horizontal">
+                                  <TextBlock Text="{Binding Name}" />
+                                  <TextBlock Text=": "/>
+                                  <TextBlock Text="{Binding Path=ItemCount}"/>
+                                  <TextBlock Text=" Item(s)"/>
+                                </StackPanel>
+                              </Expander.Header>
+                              <ItemsPresenter />
+                            </Expander>
+                          </ControlTemplate>
+                        </Setter.Value>
+                      </Setter>
+                    </Style>
+                  </GroupStyle.ContainerStyle>
+                </GroupStyle>
+              </DataGrid.GroupStyle>
+
+              <DataGrid.Columns>
+                <!--<DataGridTemplateColumn Header="Image" Width="SizeToCells" IsReadOnly="True">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Image Source="{Binding Image}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>-->
+                <DataGridTextColumn Header="Game Name" MinWidth="100" Width="*" IsReadOnly="True" Binding="{Binding GameName}"/>
+                <DataGridTextColumn Header="Topic" MinWidth="100" Width="*" IsReadOnly="True" Binding="{Binding Topic}"/>
+                <DataGridTextColumn Header="Title" MinWidth="200" Width="2*" IsReadOnly="True" Binding="{Binding Title}"/>
+              </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+              <Button Content="Add new" HorizontalAlignment="Right" Width="80" Height="22" Margin="0 5" Click="AddNewGameItemClick"/>
+              <Button Content="Delete" HorizontalAlignment="Right" Width="80" Height="22" Margin="10 5 0 5" Click="DeleteGameItemClick" Visibility="{Binding CanCloneAndDeleteVisibility}"/>
+              <Button Content="Clone" HorizontalAlignment="Right" Width="80" Height="22" Margin="10 5 0 5" Click="CloneGameItemClick" Visibility="{Binding CanCloneAndDeleteVisibility}"/>
+              <Button Content="Backup Data" HorizontalAlignment="Right" Width="100" Height="22" Margin="10 5 0 5" Click="BackupGameItemClick" Visibility="{Binding CanCloneAndDeleteVisibility}"/>
+            </StackPanel>
+
+            <!--Binding DataContext with matching Item-->
+            <Grid Name="ViewDetailItem" Grid.Column="1" Grid.Row="1">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+              </Grid.ColumnDefinitions>
+              <!--Add game data right here-->
+
+
+              <TextBlock Grid.Row="1" Text="Select game:" HorizontalAlignment="Right" Margin="0 5 20 0" Foreground="White"/>
+              <TextBlock Grid.Row="2" Text="Topic:" HorizontalAlignment="Right" Margin="0 5 20 0" Foreground="White"/>
+              <TextBlock Grid.Row="3" Text="Text:" HorizontalAlignment="Right" Margin="0 5 20 0" Foreground="White"/>
+              <TextBlock Grid.Row="4" Text="Choose image:" HorizontalAlignment="Right" Margin="0 5 20 0" Foreground="White"/>
+              <TextBlock Grid.Row="5" Text="Ignore words:" HorizontalAlignment="Right" Margin="0 5 20 0" Foreground="White"/>
+              <TextBlock Grid.Row="6" Text="Explain Text (Example):" HorizontalAlignment="Right" Margin="0 5 20 0" Foreground="White"/>
+
+              <ComboBox Grid.Row="1" Grid.Column="1" Width="240" Height="22" Margin="0 2" Text="{Binding GameName}">
+                <ComboBoxItem>Talk in Minute</ComboBoxItem>
+                <ComboBoxItem>Taboo</ComboBoxItem>
+                <ComboBoxItem>Charades</ComboBoxItem>
+                <ComboBoxItem>Picture Dash</ComboBoxItem>
+                <ComboBoxItem>Who am I</ComboBoxItem>
+              </ComboBox>
+              <TextBox Grid.Row="2" Grid.Column="1" Width="240" Height="22" Margin="0 2" Text="{Binding Topic}"/>
+              <TextBox Grid.Row="3" Grid.Column="1" Width="240" Height="22" Margin="0 2" Text="{Binding Title}"/>
+              <Button Grid.Row="4" Grid.Column="1" Width="180" Height="120" Margin="0 2" HorizontalAlignment="Left" Background="AliceBlue"
+        Click="SelectImageClick">
+                <Button.Content>
+                  <Image Name="PrevewPicture" Width="180" Height="120" Source="{Binding Image, Converter={StaticResource ByteArrayToImageConverter}}"/>
+                </Button.Content>
+              </Button>
+              <TextBox Grid.Row="5" Grid.Column="1" Width="240" Height="22" Margin="0 2" Text="{Binding IgnoreWord}"/>
+              <TextBox Grid.Row="6" Grid.Column="1" Width="240" Height="80" Margin="0 2" TextWrapping="Wrap" Text="{Binding ExplainText}"/>
+
+              <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Save" Width="80" Height="22" Margin="0 2" Click="SaveGaveItemClick"/>
+                <Button Content="Import list n Add" Width="120" Height="22" Margin="10 2 0 2" Click="ImportListAndAddClick"
+                        Visibility="{Binding DataContext.CanCloneAndDeleteVisibility, ElementName=LayoutRoot, Converter={StaticResource InvertVisibilityConverter}}"/>
+              </StackPanel>
+
+              <TextBlock Name="InformMessage" Grid.Row="8" Grid.ColumnSpan="2" Text="* Data has been saved successfully" HorizontalAlignment="Left" Margin="60 5 20 0" Foreground="DarkRed" Visibility="Collapsed"/>
+            </Grid>
+          </Grid>
+        </TabItem.Content>
+      </TabItem>
+      <TabItem Header="Game Setting">
+        <TabItem.Content>
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Expander Header="Talk in Minute game" Foreground="White">
+              <Expander.Content>
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition/>
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition/>
+                  </Grid.ColumnDefinitions>
+
+                  <TextBlock Text="Time for present topic (minute): " Foreground="White" HorizontalAlignment="Right" Margin="0 5 20 0"/>
+                  <TextBox Grid.Column="1" Width="200" HorizontalAlignment="Left" Text="{Binding TalkInMinuteTiming, Mode=TwoWay}"/>
+
+                </Grid>
+              </Expander.Content>
+            </Expander>
+            <Expander Grid.Row="1" Header="Taboo game" Foreground="White">
+              <Expander.Content>
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition/>
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition/>
+                  </Grid.ColumnDefinitions>
+
+                  <TextBlock Text="Time for describe topic (minute): " Foreground="White" HorizontalAlignment="Right" Margin="0 5 20 0"/>
+                  <TextBox Grid.Column="1" Width="200" HorizontalAlignment="Left" Text="{Binding TabooTiming, Mode=TwoWay}"/>
+                </Grid>
+              </Expander.Content>
+            </Expander>
+            <Expander Grid.Row="2" Header="Charades game" Foreground="White">
+              <Expander.Content>
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition/>
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition/>
+                  </Grid.ColumnDefinitions>
+
+                  <TextBlock Text="Time for describe topic (minute): " Foreground="White" HorizontalAlignment="Right" Margin="0 5 20 0"/>
+                  <TextBox Grid.Column="1" Width="200" HorizontalAlignment="Left" Text="{Binding CharadesTiming, Mode=TwoWay}"/>
+                </Grid>
+              </Expander.Content>
+            </Expander>
+            <Expander Grid.Row="3" Header="Picture Dash game" Foreground="White">
+              <Expander.Content>
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition/>
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition/>
+                  </Grid.ColumnDefinitions>
+
+                  <TextBlock Text="Time for across picture (second): " Foreground="White" HorizontalAlignment="Right" Margin="0 5 20 0"/>
+                  <TextBox Grid.Column="1" Width="200" HorizontalAlignment="Left" Text="{Binding PictureDashTiming, Mode=TwoWay}"/>
+                </Grid>
+              </Expander.Content>
+            </Expander>
+            <Expander Grid.Row="4" Header="Who am I game" Foreground="White">
+              <Expander.Content>
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition/>
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition/>
+                  </Grid.ColumnDefinitions>
+
+                  <TextBlock Text="Time for ask question (minute): " Foreground="White" HorizontalAlignment="Right" Margin="0 5 20 0"/>
+                  <TextBox Grid.Column="1" Width="200" HorizontalAlignment="Left" Text="{Binding WhoAmITiming, Mode=TwoWay}"/>
+                </Grid>
+              </Expander.Content>
+            </Expander>
+
+            <Button Grid.Row="5" Content="Save" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="80" Height="22" Margin="10 5 0 5" Click="SaveSettingClick"/>
+          </Grid>
+        </TabItem.Content>
+      </TabItem>
+      <TabItem Header="Help">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+
+          <Expander Header="Talk in Minute game" Foreground="White">
+            <Expander.Content>
+              <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text=" - Select a number show on screen." Foreground="White"/>
+                <TextBlock Text=" - Each number is a topic for you. You have time to talk everything about it." Foreground="White"/>
+                <TextBlock Text=" - Stop talking when you hear the sound" Foreground="White"/>
+              </StackPanel>
+            </Expander.Content>
+          </Expander>
+          <Expander Grid.Row="1" Header="Taboo game" Foreground="White">
+            <Expander.Content>
+              <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text=" - Select a number show on screen." Foreground="White"/>
+                <TextBlock Text=" - Each number is a topic for you. You have time to talk everything about it." Foreground="White"/>
+                <TextBlock Text=" - Stop talking when you hear the sound" Foreground="White"/>
+              </StackPanel>
+            </Expander.Content>
+          </Expander>
+          <Expander Grid.Row="2" Header="Charades game" Foreground="White">
+            <Expander.Content>
+              <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text=" - Select a number show on screen." Foreground="White"/>
+                <TextBlock Text=" - Each number is a topic for you. You have time to talk everything about it." Foreground="White"/>
+                <TextBlock Text=" - Stop talking when you hear the sound" Foreground="White"/>
+              </StackPanel>
+            </Expander.Content>
+          </Expander>
+          <Expander Grid.Row="3" Header="Picture Dash game" Foreground="White">
+            <Expander.Content>
+              <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text=" - Select a number show on screen." Foreground="White"/>
+                <TextBlock Text=" - Each number is a topic for you. You have time to talk everything about it." Foreground="White"/>
+                <TextBlock Text=" - Stop talking when you hear the sound" Foreground="White"/>
+              </StackPanel>
+            </Expander.Content>
+          </Expander>
+          <Expander Grid.Row="4" Header="Who am I game" Foreground="White">
+            <Expander.Content>
+              <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text=" - Select a number show on screen." Foreground="White"/>
+                <TextBlock Text=" - Each number is a topic for you. You have time to talk everything about it." Foreground="White"/>
+                <TextBlock Text=" - Stop talking when you hear the sound" Foreground="White"/>
+              </StackPanel>
+            </Expander.Content>
+          </Expander>
+        </Grid>
+      </TabItem>
+      <TabItem Header="About">
+        <Grid>
+          <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="English Game v1.0.0.0" Foreground="White"/>
+            <TextBlock Text="Application created by Ryan Tong" Foreground="White"/>
+            <TextBlock Text="Contact me by zquanghoangz@gmail.com" Foreground="White"/>
+          </StackPanel>
+        </Grid>
+      </TabItem>
+    </TabControl>
+
+  </Grid>
+</UserControl>
